@@ -1,0 +1,10 @@
+# Colab에는 대부분 설치되어 있어 0번 셀에서 빠르게 끝난다.
+ultralytics>=8.0          # ① YOLO 검출 (02 전처리에서만 사용)
+filterpy>=1.4.5           # ④ 온라인 KF, ⑬ RTS
+numpy>=1.24
+pandas>=2.0,<3            # pandas 3.0에서는 후처리 일부 연산이 읽기 전용 배열 오류로 멈춤
+scipy>=1.10
+opencv-python>=4.7        # cv2.aruco 포함 버전
+openpyxl>=3.1             # 엑셀 저장
+PyYAML>=6.0               # config.yaml
+matplotlib>=3.7           # 노트북 그래프

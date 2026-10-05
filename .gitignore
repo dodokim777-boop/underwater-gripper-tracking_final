@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 데이터 · 모델 · 결과는 GitHub에 올리지 않는다 (Google Drive에 둠)
+*.pt
+*.mp4
+*.MP4
+*.avi
+*.mov
+*.npz
+*.xlsx
+*.csv
+results/
+runs/
+
+# 테스트용 합성 데이터는 예외
+!tests/data/*.npz
+!tests/data/*.xlsx
+
+# 개인 설정 사본
+config_local*.yaml

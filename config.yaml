@@ -1,0 +1,99 @@
+# ============================================================
+# 실험 설정 파일
+# ------------------------------------------------------------
+# - 이 파일을 Google Drive의 실험 폴더에 복사해서 쓴다 (Colab 저장소 폴더는 세션이 끝나면 지워짐).
+# - 노트북 01·02·03은 모두 이 파일 하나를 읽는다. 값을 바꾸면 세 노트북에 같이 적용된다.
+# - 경로가 '/'로 시작하지 않으면 experiment.data_root 기준 상대경로로 본다.
+# - 여기에 없는 값은 gtrack/settings.py의 기본값을 쓴다.
+# - 실행할 때 실제로 쓴 값 전체가 결과 폴더의 config_used.yaml로 저장된다.
+# ============================================================
+
+
+# ============================================================
+# [필수] 매 실험마다 확인 / 수정
+# ============================================================
+experiment:
+  name: "exp_0812_trial5"                       # 결과 폴더 이름 → <data_root>/<output_root>/<name>/
+  data_root: "/content/drive/MyDrive/8월연구"    # 이 실험 데이터가 있는 Drive 폴더
+
+inputs:
+  top_video: "0812실험top/발표폴더/top5.MP4"      # 상단 영상 (정면 영상과 프레임 정렬된 것)
+  front_video: "0812fro/fro5.mp4"               # 정면 영상
+  # 보정 NPZ: notebooks/01이 이 경로에 저장하고, 02·03이 이 경로에서 읽는다.
+  # 카메라 위치가 그대로면 이전 실험의 NPZ를 그대로 지정해도 된다.
+  calib_top_npz: "manual_calib_top_0813.npz"
+  calib_front_npz: "manual_calib_front_0813.npz"
+  # YOLO 가중치 (모델을 다시 학습했을 때만 변경)
+  top_weights: "/content/drive/MyDrive/yolo_runs/0812top_sgd/weights/0813topbest.pt"
+  front_weights: "/content/drive/MyDrive/yolo_runs/0812fro_sgd/weights/0813frobest.pt"
+
+outputs:
+  output_root: "results"                        # data_root 기준. 결과는 results/<name>/ 아래에 생긴다
+
+water:
+  surface_z_cm: 67.0          # 바닥(ID0 마커 평면)으로부터 실제 물 높이 [cm]. 좌표값이 아니라 높이다.
+
+# 두 영상이 이미 프레임 정렬되어 있으면 0.0 유지 (일반적인 경우)
+sync:
+  top_time_offset_sec: 0.0
+  front_time_offset_sec: 0.0
+
+
+# ============================================================
+# [보정 NPZ 생성] notebooks/01 에서만 사용
+# ============================================================
+calibration:
+  top_video: ""               # 비워 두면 inputs.top_video 사용 (마커가 잘 보이는 마른 상태 영상 권장)
+  front_video: ""             # 비워 두면 inputs.front_video 사용
+  frame_index: 0              # 마커를 찍을 프레임 번호 (0 = 첫 프레임)
+  front_use_wall_transform: false   # false: 수조 내부 바닥 마커를 정면에서 찍음 / true: 수조 밖 벽 마커를 찍음
+  front_pick_rightmost: true        # 정면에서 같은 ID 마커가 두 개 보이면 오른쪽 마커 사용
+  auto_detect: true                 # ArUco 자동인식을 먼저 시도
+
+
+# ============================================================
+# [장비 변경 시] 카메라 · 수조 · 마커 · 그리퍼 위치가 바뀔 때만 수정
+# ============================================================
+cameras:
+  top:
+    model: "GoPro HERO13 Black"
+    K: [[1041.57146, 0.0, 949.734448],
+        [0.0, 1047.97285, 551.602202],
+        [0.0, 0.0, 1.0]]
+    dist: [0.03618997, -0.04817693, -0.00320361, -0.00075223, 0.02632374]
+  front:
+    model: "Insta360 Ace Pro 2"
+    K: [[734.42834248, 0.0, 958.12885964],
+        [0.0, 738.92389777, 536.16766245],
+        [0.0, 0.0, 1.0]]
+    dist: [1.51047198e-02, -8.55712758e-03, -1.38100761e-03, 1.74587731e-05, 5.72933769e-03]
+
+setup:
+  marker_size_cm: 15.0                          # ArUco 마커 한 변 [cm] (DICT_4X4_50)
+  motor_center_in_id0_cm: [-26.5, 28.0, 17.1]   # 바닥 ID0 마커 기준 모터(그리퍼) 중심 [cm] → 출력 원점
+  front_wall_y_cm: -11.6                        # 정면 수조 벽(굴절 경계) 위치 Y [cm]
+  # 정면 벽 마커 좌표계 → ID0 world 변환 (calibration.front_use_wall_transform: true일 때만 사용)
+  front_wall_marker_R: [[1, 0, 0],
+                        [0, 0, 1],
+                        [0, -1, 0]]
+  front_wall_marker_t: [52.0, -15.5, -10.0]
+
+models:
+  target_class_names: ["whitecube"]             # YOLO 클래스 이름 (공백·밑줄·대소문자 무시)
+
+video:
+  expected_resolution: [1920, 1080]             # 다르면 실행을 멈춘다
+  expected_fps: 59.94                           # 게이트·후처리 frame 상수의 기준 시간축
+  save_annotated_video: true                    # 주석 영상 저장 여부 (끄면 전처리가 빨라짐)
+
+
+# ============================================================
+# [고급] 알고리즘 상수 덮어쓰기 — 원칙적으로 수정 금지
+# ------------------------------------------------------------
+# gtrack/settings.py의 [C] 구역 이름을 그대로 쓴다. 바꾸면 결과가 달라지며,
+# 바꾼 값은 결과 엑셀의 Configuration 시트와 config_used.yaml에 남는다.
+# 예)
+#   RAY_GAP_MAX_CM: 7.0
+#   GRAB_MIN: 60
+# ============================================================
+advanced: {}

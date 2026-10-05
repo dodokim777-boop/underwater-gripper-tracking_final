@@ -1,0 +1,359 @@
+<mxfile host="app.diagrams.net" pages="2">
+  <diagram name="페이지-1" id="HxLK1e6DCdMSysIqM3Xa">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="laneOn" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontSize=13;fontStyle=1;labelBackgroundColor=none;" value="온라인 전처리" vertex="1">
+          <mxGeometry x="40" y="85" width="620" height="565" as="geometry"/>
+        </mxCell>
+        <mxCell id="laneOff" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontSize=13;fontStyle=1;labelBackgroundColor=none;" value="오프라인 후처리" vertex="1">
+          <mxGeometry x="700" y="85" width="700" height="590" as="geometry"/>
+        </mxCell>
+        <mxCell id="inTop" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=12;fontSize=11;labelBackgroundColor=none;" value="상단 영상&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:9px&quot;&gt;프레임 정렬됨&lt;/font&gt;" vertex="1">
+          <mxGeometry x="60" y="25" width="115" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="inFront" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=12;fontSize=11;labelBackgroundColor=none;" value="정면 영상&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:9px&quot;&gt;프레임 정렬됨&lt;/font&gt;" vertex="1">
+          <mxGeometry x="185" y="25" width="115" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="inW" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=12;fontSize=11;labelBackgroundColor=none;" value="YOLO 가중치&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:9px&quot;&gt;top / front .pt&lt;/font&gt;" vertex="1">
+          <mxGeometry x="310" y="25" width="150" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="inC" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=12;fontSize=11;labelBackgroundColor=none;fillColor=#FFF59D;" value="보정값&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:9px&quot;&gt;NPZ: R, t / 소스 고정값: K, D&lt;/font&gt;" vertex="1">
+          <mxGeometry x="470" y="25" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="s1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="① 물체 검출 (YOLO)&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;경계상자 중심을 영상 대표점으로 사용&lt;br&gt;→ Top_Status / Front_Status, *_U_px / *_V_px, *_Conf&lt;/font&gt;" vertex="1">
+          <mxGeometry x="175" y="110" width="350" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="d1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="두 시점 검출&lt;br&gt;성립?" vertex="1">
+          <mxGeometry x="245" y="196" width="210" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;" value="② 광선 생성 · 평면 경계 굴절&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;벡터형 Snell, 굴절 ON·OFF 후보 동시 산출&lt;/font&gt;" vertex="1">
+          <mxGeometry x="175" y="296" width="350" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="③ 두 광선 최근접점 삼각측량&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;→ Candidate_ON/OFF_*_cm, Geometry_Status, Ray_Gap_cm&lt;/font&gt;" vertex="1">
+          <mxGeometry x="175" y="380" width="350" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="s4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="④ 후보 수용 판정 및 궤적 확정&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;광선 간 거리(≤ 7 cm) → 변위 게이트 → Mahalanobis 게이트 → 7-of-10 확정&lt;br&gt;거부 후보의 임시 예측은 폐기&lt;br&gt;→ Track_State, Meas_Status, Missing_Reason, KF_Std_*_cm&lt;/font&gt;" vertex="1">
+          <mxGeometry x="175" y="464" width="350" height="96" as="geometry"/>
+        </mxCell>
+        <mxCell id="s5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑤ 그리퍼 중심 좌표 변환&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;→ Meas_X_cm / Meas_Y_cm / Meas_Z_cm&lt;/font&gt;" vertex="1">
+          <mxGeometry x="175" y="584" width="350" height="52" as="geometry"/>
+        </mxCell>
+        <mxCell id="fRaw" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;size=0.12;fontSize=12;fontStyle=1;labelBackgroundColor=none;fillColor=#FFF59D;" value="3D_raw_online.xlsx&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:9px&quot;&gt;Trajectory / Triangulation / Online_Filter / Summary / Configuration&lt;/font&gt;" vertex="1">
+          <mxGeometry x="200" y="700" width="300" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="fVid" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;size=0.12;dashed=1;fontSize=11;labelBackgroundColor=none;" value="주석 영상 (선택)" vertex="1">
+          <mxGeometry x="40" y="700" width="150" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="s6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;" value="⑥ Hampel 이상치 제거&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;국소 선형 추세 잔차, 축별 최소 문턱 병용&lt;/font&gt;" vertex="1">
+          <mxGeometry x="790" y="110" width="380" height="54" as="geometry"/>
+        </mxCell>
+        <mxCell id="s7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeWidth=3;fontSize=12;fontStyle=1;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑦ 복원 기준 관측 고정&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;→ Anchor_Raw_* · 이후 어느 단계에서도 갱신되지 않음&lt;/font&gt;" vertex="1">
+          <mxGeometry x="790" y="184" width="380" height="54" as="geometry"/>
+        </mxCell>
+        <mxCell id="s8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑧ 과정 잡음 σ&lt;sub&gt;a&lt;/sub&gt; 추정&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;연속 두 시점 구간 2차 차분의 강건 표준편차&lt;/font&gt;" vertex="1">
+          <mxGeometry x="790" y="258" width="380" height="54" as="geometry"/>
+        </mxCell>
+        <mxCell id="s9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑨ 복원 모드 분류 · Z 하한 적용 상자 통과 판정&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;NONE / TOP_RAY / FRONT_RAY&lt;br&gt;→ Recovery_Mode, Top_Zone_Supported&lt;/font&gt;" vertex="1">
+          <mxGeometry x="790" y="332" width="380" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="s10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑩ 단일시점 구간 좌표 복원&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;비관측 축 추정 + 유지된 카메라의 굴절 광선 (그림 C1)&lt;br&gt;→ Coord_Type, Hidden_Axis_Std_cm, Z_Floor_Applied&lt;/font&gt;" vertex="1">
+          <mxGeometry x="790" y="414" width="380" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="s11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑪ 작업영역 판정 · 포획 추정(GRAB) 표시&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;작업영역 |X|, |Y| ≤ 25, 0 ≤ Z ≤ 25 cm&lt;br&gt;→ X_cm / Y_cm / Z_cm (평활화 전), State, In_Zone&lt;/font&gt;" vertex="1">
+          <mxGeometry x="790" y="496" width="380" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="s14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑭ 프레임별 속도 산출&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;평활화 전 좌표, 11프레임 국소 선형 기울기, 좌표 출처 등급&lt;br&gt;→ V*_cm_s, Speed_3D_cm_s, V*_Source&lt;/font&gt;" vertex="1">
+          <mxGeometry x="790" y="584" width="380" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="s12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;dashed=1;fontSize=11;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑫ 표시용 작업영역 연결&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:9px&quot;&gt;→ Display_In_Zone (Plot_Aux)&lt;br&gt;좌표·복원·GRAB·RTS에 미반영&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1200" y="490" width="170" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="s13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;dashed=1;fontSize=11;labelBackgroundColor=none;fillColor=#FFF59D;" value="⑬ 표시용 3차원 RTS 평활화&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:9px&quot;&gt;복원 프레임 X·Y·Z 보존&lt;br&gt;→ X_vis_cm 등 (Plot_Aux)&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1200" y="580" width="170" height="76" as="geometry"/>
+        </mxCell>
+        <mxCell id="fFin" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;size=0.12;fontSize=12;fontStyle=1;labelBackgroundColor=none;fillColor=#FFF59D;" value="3D_final.xlsx&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:9px&quot;&gt;Result / Legend / Plot_Aux / Summary / Configuration / Debug&lt;/font&gt;" vertex="1">
+          <mxGeometry x="830" y="700" width="300" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" parent="1" edge="1" source="inTop" target="s1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;exitX=0.5;exitY=1;entryX=0.3;entryY=0;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" parent="1" edge="1" source="inFront" target="s1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;exitX=0.5;exitY=1;entryX=0.45;entryY=0;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" parent="1" edge="1" source="inW" target="s1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;exitX=0.5;exitY=1;entryX=0.7;entryY=0;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" parent="1" edge="1" source="inC" target="s2" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;exitX=0.85;exitY=1;entryX=1;entryY=0.5;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="623" y="324"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" parent="1" edge="1" source="s1" target="d1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" parent="1" edge="1" source="d1" target="s2" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;fontSize=11;" value="예">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" parent="1" edge="1" source="d1" target="s4" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;fontSize=10;exitX=0;exitY=0.5;entryX=0;entryY=0.5;verticalAlign=bottom;" value="아니오&lt;br&gt;TOP / FRONT / BOTH_MISSING">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="231"/>
+              <mxPoint x="110" y="512"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" parent="1" edge="1" source="s2" target="s3" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" parent="1" edge="1" source="s3" target="s4" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" parent="1" edge="1" source="s4" target="s5" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e11" parent="1" edge="1" source="s5" target="fRaw" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" parent="1" edge="1" source="s3" target="fRaw" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;fontColor=default;dashed=1;fontSize=9;exitX=1;exitY=0.5;entryX=1;entryY=0.35;labelBackgroundColor=#FFF59D;" value="Candidate_OFF_*_cm&lt;br&gt;굴절 미적용 진단용">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="592" y="408"/>
+              <mxPoint x="592" y="720"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" parent="1" edge="1" source="s5" target="fVid" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;dashed=1;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="115" y="610"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14" parent="1" edge="1" source="fRaw" target="s6" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;strokeWidth=2;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="729"/>
+              <mxPoint x="680" y="78"/>
+              <mxPoint x="980" y="78"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eC1" parent="1" edge="1" source="inC" target="s9" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;fontColor=default;fontSize=9;exitX=1;exitY=0.5;entryX=1;entryY=0.5;labelBackgroundColor=#FFF59D;" value="같은 보정값으로 광선 재계산">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1185" y="45"/>
+              <mxPoint x="1185" y="363"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eC2" parent="1" edge="1" source="inC" target="s10" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1185" y="45"/>
+              <mxPoint x="1185" y="445"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" parent="1" edge="1" source="s6" target="s7" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e16" parent="1" edge="1" source="s7" target="s8" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e17" parent="1" edge="1" source="s8" target="s9" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e18" parent="1" edge="1" source="s9" target="s10" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e19" parent="1" edge="1" source="s7" target="s10" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;fontColor=default;fontSize=9;exitX=0;exitY=0.5;entryX=0;entryY=0.5;labelBackgroundColor=#FFF59D;" value="기준 관측 참조 (읽기 전용)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="745" y="211"/>
+              <mxPoint x="745" y="445"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20" parent="1" edge="1" source="s10" target="s11" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e21" parent="1" edge="1" source="s11" target="s12" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;dashed=1;exitX=1;exitY=0.4;entryX=0;entryY=0.5;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e25" parent="1" edge="1" source="s11" target="s13" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;dashed=1;exitX=1;exitY=0.85;entryX=0;entryY=0.5;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1185" y="549"/>
+              <mxPoint x="1185" y="618"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" parent="1" edge="1" source="s11" target="s14" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;fontColor=default;fontSize=9;labelBackgroundColor=#FFF59D;" value="평활화 전 최종 좌표">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e24" parent="1" edge="1" source="s14" target="fFin" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;fontColor=default;fontSize=9;labelBackgroundColor=#FFF59D;" value="Result: 좌표·상태·속도">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e23" parent="1" edge="1" source="s12" target="fFin" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;dashed=1;exitX=1;exitY=0.5;entryX=1;entryY=0.78;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1390" y="525"/>
+              <mxPoint x="1390" y="745"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e26" parent="1" edge="1" source="s13" target="fFin" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;labelBackgroundColor=none;fontColor=default;dashed=1;exitX=0.5;exitY=1;entryX=1;entryY=0.26;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1285" y="715"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lg" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;align=left;verticalAlign=middle;spacingLeft=14;fontSize=11;labelBackgroundColor=none;" value="&lt;b&gt;범례&lt;/b&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp; 평행사변형 = 입력 데이터&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp; 둥근 사각형 = 처리 단계&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp; 마름모 = 분기&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp; 문서 = 파일 산출물&lt;br&gt;굵은 테두리 = 이후 단계에서 갱신되지 않는 불변 스냅숏&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp; 점선 = 최종 좌표·속도에 반영되지 않는 시각화·진단 전용 경로&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;각 단계 사이에는 불변식 검사(validate)를 수행한다. 운영 상수의 값은 표 5와 부록 E를 따른다. 노란 채움은 0930 코드 반영으로 바뀐 요소이며 검토 후 채움을 지운다.&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="800" width="1360" height="80" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="페이지-2" id="ZlV4vgW5y52OeKm--ZNP">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="c0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" value="Recovery_Mode ≠ NONE 인 구간&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;FRONT_MISSING → TOP_RAY&amp;nbsp;&amp;nbsp;/&amp;nbsp;&amp;nbsp;TOP_MISSING → FRONT_RAY&lt;/font&gt;" vertex="1">
+          <mxGeometry x="340" y="20" width="320" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="cd" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=12;" value="결측 구조 판정" vertex="1">
+          <mxGeometry x="380" y="100" width="240" height="76" as="geometry"/>
+        </mxCell>
+        <mxCell id="cA" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=#333333;fontSize=12;fillColor=#FFF59D;" value="양측 단일 결측 (300프레임 이하)&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;비관측 축을 양측 기준 관측 사이에서 선형 보간&lt;br&gt;사후 표준편차 기준 미적용&lt;/font&gt;" vertex="1">
+          <mxGeometry x="30" y="230" width="280" height="86" as="geometry"/>
+        </mxCell>
+        <mxCell id="cB" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=#333333;fontSize=12;fillColor=#FFF59D;" value="반복 결측 · 300프레임 초과 양측 결측&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;Theil–Sen 초기 속도&lt;br&gt;1차원 등속도 Kalman filter&lt;br&gt;중간 두 시점 관측은 Huber 가중 위치 관측&lt;br&gt;고정구간 RTS 평활화&lt;/font&gt;" vertex="1">
+          <mxGeometry x="360" y="230" width="280" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="cC" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=#333333;fontSize=12;fillColor=#FFF59D;" value="단측 결측&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;말단: 순방향 / 선두: 시간 역전&lt;br&gt;1차원 등속도 Kalman filter · RTS&lt;/font&gt;" vertex="1">
+          <mxGeometry x="690" y="230" width="280" height="86" as="geometry"/>
+        </mxCell>
+        <mxCell id="cP" parent="1" style="rhombus;whiteSpace=wrap;html=1;strokeColor=#333333;fontSize=11;fontSize=10;fillColor=#FFF59D;" value="상태 초기화 성공,&lt;br&gt;사후 표준편차 ≤ Z 6 / Y 2 cm,&lt;br&gt;단측 예측 길이 ≤ 150&lt;br&gt;(조건부 300) frame?" vertex="1">
+          <mxGeometry x="580" y="380" width="300" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="cM" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=#333333;fontSize=12;fillColor=#FFF59D;" value="비관측 축 값 확정&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;TOP_RAY → Z&amp;nbsp;&amp;nbsp;/&amp;nbsp;&amp;nbsp;FRONT_RAY → Y&lt;/font&gt;" vertex="1">
+          <mxGeometry x="330" y="530" width="280" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="cZ" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=#333333;fontSize=12;fillColor=#FFF59D;" value="복원 Z 하한 (TOP_RAY만)&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;Z 하한 적용 상자 통과 + 기준 관측 Z ≥ 3 cm&lt;br&gt;→ Z ← max(Z, 3 cm), 프레임별 적용&lt;/font&gt;" vertex="1">
+          <mxGeometry x="330" y="610" width="280" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cR" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=#333333;fontSize=12;fillColor=#FFF59D;" value="유지된 카메라 굴절 광선 × 비관측 축 평면 교점&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;TOP_RAY → X, Y&amp;nbsp;&amp;nbsp;/&amp;nbsp;&amp;nbsp;FRONT_RAY → X, Z&lt;/font&gt;" vertex="1">
+          <mxGeometry x="310" y="694" width="320" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="cO" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;strokeColor=#333333;fontSize=12;fillColor=#FFF59D;" value="기준 위치 오프셋 보정&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;기준 관측 좌표와 같은 광선 교점의 차이&lt;br&gt;양측 단일 결측: 좌우 오프셋 선형 혼합 / 그 밖: 전체 중앙값&lt;/font&gt;" vertex="1">
+          <mxGeometry x="310" y="780" width="320" height="62" as="geometry"/>
+        </mxCell>
+        <mxCell id="cS" parent="1" style="rhombus;whiteSpace=wrap;html=1;strokeColor=#333333;fontSize=11;fillColor=#FFF59D;" value="광선 교점 유효?&lt;br&gt;FRONT_RAY: X 일관성 통과?" vertex="1">
+          <mxGeometry x="345" y="866" width="250" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="cOut" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;size=0.14;strokeColor=#333333;fontSize=12;fontStyle=1;fillColor=#FFF59D;" value="복원 좌표 (평활화 전)&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;→ Coord_Type, Hidden_Axis_Std_cm, Z_Floor_Applied&lt;/font&gt;" vertex="1">
+          <mxGeometry x="310" y="980" width="320" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="cL" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#eeeeee;strokeColor=#666666;fontSize=12;fillColor=#FFF59D;" value="LOST&lt;br&gt;&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;좌표를 생성하지 않음&lt;br&gt;사유는 Hidden_Stop_Reason에 기록&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1000" y="700" width="230" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="k1" parent="1" edge="1" source="c0" target="cd" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="k2" parent="1" edge="1" source="cd" target="cA" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;fontSize=10;exitX=0;exitY=0.5;entryX=0.5;entryY=0;labelBackgroundColor=#FFF59D;" value="양측 기준 관측 존재&lt;br&gt;반복 결측 아님, 300프레임 이하">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="138"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k3" parent="1" edge="1" source="cd" target="cB" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;fontSize=10;labelBackgroundColor=#FFF59D;" value="같은 방향 결측 반복 또는&lt;br&gt;양측 결측 300프레임 초과">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="k4" parent="1" edge="1" source="cd" target="cC" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;fontSize=10;exitX=1;exitY=0.5;entryX=0.5;entryY=0;labelBackgroundColor=#FFF59D;" value="한쪽 기준 관측만 존재">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="138"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k16" parent="1" edge="1" source="cd" target="cL" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;fontSize=10;exitX=0.75;exitY=0.25;entryX=0.74;entryY=0;labelBackgroundColor=#FFF59D;" value="기준 관측 없음 (NO_RAW_ANCHOR)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1170" y="119"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k5" parent="1" edge="1" source="cA" target="cM" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="558"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k6" parent="1" edge="1" source="cB" target="cP" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="360"/>
+              <mxPoint x="730" y="360"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k7" parent="1" edge="1" source="cC" target="cP" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="360"/>
+              <mxPoint x="730" y="360"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k8" parent="1" edge="1" source="cP" target="cM" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;fontSize=11;exitX=0.5;exitY=1;entryX=0.75;entryY=0;labelBackgroundColor=#FFF59D;" value="예">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="730" y="510"/>
+              <mxPoint x="540" y="510"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k9" parent="1" edge="1" source="cP" target="cL" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;fontSize=10;exitX=1;exitY=0.5;entryX=0.26;entryY=0;labelBackgroundColor=#FFF59D;" value="아니오&lt;br&gt;STATE_INIT_FAILED / POSTERIOR_STD_LIMIT / MAX_EXTRAP_LEN">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1060" y="435"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k10" parent="1" edge="1" source="cM" target="cZ" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="k11" parent="1" edge="1" source="cZ" target="cR" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="k12" parent="1" edge="1" source="cR" target="cO" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="k13" parent="1" edge="1" source="cO" target="cS" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;" value="">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="k14" parent="1" edge="1" source="cS" target="cOut" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;fontSize=11;labelBackgroundColor=#FFF59D;" value="예">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="k15" parent="1" edge="1" source="cS" target="cL" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;strokeColor=#333333;fontSize=10;exitX=1;exitY=0.5;entryX=0.5;entryY=1;labelBackgroundColor=#FFF59D;" value="아니오&lt;br&gt;RAY_GEOMETRY_FAILURE / FRONT_X_SANITY / RAY_OR_SANITY_FAILURE">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1115" y="911"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note2" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="&lt;font color=&quot;#666666&quot; style=&quot;font-size:10px&quot;&gt;노란 채움은 0930 코드 반영으로 바뀐 요소이며 검토 후 채움을 지운다. 반복·단측 결측만 사후 표준편차와 길이 상한을 거치며, 양측 단일 결측은 바로 비관측 축 값을 확정한다.&lt;/font&gt;" vertex="1">
+          <mxGeometry x="30" y="1060" width="900" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
