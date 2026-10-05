@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data, models, and results are kept on Google Drive
+*.pt
+*.mp4
+*.MP4
+*.avi
+*.mov
+*.npz
+*.xlsx
+*.csv
+results/
+runs/
+
+# Test data for edit_check
+!edit_check/data/*.npz
+!edit_check/data/*.xlsx

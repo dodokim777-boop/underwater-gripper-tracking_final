@@ -1,0 +1,84 @@
+# Experiment settings. Copy this file to the experiment folder on Google Drive and edit it there.
+# All notebooks read this one file. Relative paths are resolved from experiment.data_root.
+# Values not listed here use the defaults in main_code/settings.py.
+
+# ============================================================
+# [Required] Set once per setup; for each video set, change experiment.name and the two videos
+# ============================================================
+experiment:
+  name: "exp_0812_trial5"                       # results folder: <data_root>/<output_root>/<name>/
+  data_root: "/content/drive/MyDrive/files"     # Drive folder of this experiment
+
+inputs:
+  top_video: "top/top5.MP4"                     # frame-aligned with the front video
+  front_video: "front/front5.mp4"
+  calib_top_npz: "manual_calib_top.npz"         # written by 01_calibration, read by 02 and 03
+  calib_front_npz: "manual_calib_front.npz"
+  top_weights: "/content/drive/MyDrive/yolo_runs/0812top_sgd/weights/0813topbest.pt"
+  front_weights: "/content/drive/MyDrive/yolo_runs/0812fro_sgd/weights/0813frobest.pt"
+
+outputs:
+  output_root: "results"                        # relative to data_root, or an absolute path
+
+water:
+  surface_z_cm: 67.0                            # water height above the floor (ID0 marker plane) [cm]
+
+sync:
+  top_time_offset_sec: 0.0                      # 0 for frame-aligned videos
+  front_time_offset_sec: 0.0
+
+
+# ============================================================
+# [Calibration] Used by 01_calibration only
+# ============================================================
+calibration:
+  top_video: ""                                 # empty: inputs.top_video
+  front_video: ""                               # empty: inputs.front_video
+  frame_index: 0                                # frame where the marker is clearly visible
+  front_use_wall_transform: false               # true: front camera sees the wall marker, not the floor marker
+  front_pick_rightmost: true                    # use the rightmost marker if two are visible
+
+
+# ============================================================
+# [Equipment] Change only when cameras, tank, markers, or gripper change
+# ============================================================
+cameras:
+  top:
+    model: "GoPro HERO13 Black"
+    K: [[1041.57146, 0.0, 949.734448],
+        [0.0, 1047.97285, 551.602202],
+        [0.0, 0.0, 1.0]]
+    dist: [0.03618997, -0.04817693, -0.00320361, -0.00075223, 0.02632374]
+  front:
+    model: "Insta360 Ace Pro 2"
+    K: [[734.42834248, 0.0, 958.12885964],
+        [0.0, 738.92389777, 536.16766245],
+        [0.0, 0.0, 1.0]]
+    dist: [1.51047198e-02, -8.55712758e-03, -1.38100761e-03, 1.74587731e-05, 5.72933769e-03]
+
+setup:
+  marker_size_cm: 15.0                          # ArUco marker side (DICT_4X4_50) [cm]
+  motor_center_in_id0_cm: [-26.5, 28.0, 17.1]   # gripper (motor) center in ID0 coordinates = output origin [cm]
+  front_wall_y_cm: -11.6                        # front wall (refraction plane) Y [cm]
+  front_wall_marker_R: [[1, 0, 0],              # wall marker frame -> world, used only if front_use_wall_transform
+                        [0, 0, 1],
+                        [0, -1, 0]]
+  front_wall_marker_t: [52.0, -15.5, -10.0]
+
+models:
+  target_class_names: ["whitecube"]             # YOLO class name (case, space, underscore ignored)
+
+video:
+  expected_resolution: [1920, 1080]             # stop if different
+  expected_fps: 59.94                           # reference timeline for frame-based constants
+  save_annotated_video: true                    # false makes preprocessing faster
+
+
+# ============================================================
+# [Modify with caution] Algorithm constants
+# Names from section [C] of main_code/settings.py. Changing them changes the results.
+# Example:
+#   RAY_GAP_MAX_CM: 7.0
+#   GRAB_MIN: 60
+# ============================================================
+advanced: {}
